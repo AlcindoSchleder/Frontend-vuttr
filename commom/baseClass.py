@@ -208,7 +208,7 @@ class errorCodes:
     * @author     Alcindo Schleder <alcindoschleder@gmail.com>
     * @copyright  Vocatio Telecom <https://www.vocatiotelecom.com.br>
 """
-class BaseClass:
+class TBaseClass:
     def __init__(self):
         self._result = self._setDefault()
     

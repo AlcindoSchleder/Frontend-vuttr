@@ -8,8 +8,8 @@ Website: https://www.vocatiotelecom.com.br
 Last edited: April 14, 2018 
 """
 from inspect import signature
-from baseClass import *
 import re
+from commom.baseClass import *
 
 """
     Class that raises a exception on validade the StateChange CallBack - screenState.py
@@ -81,7 +81,7 @@ STT_DSCR = 1
 STT_BG   = 2
 STT_FG   = 3
 
-class TScreenStates(BaseClass):
+class TScreenStates(TBaseClass):
     # Class constructor: this class receive a callback function that must follow this format:
     # def name_of_function(OldState: int, NewState: int):
     def __init__(self, callback):
@@ -180,6 +180,10 @@ class TScreenStates(BaseClass):
         return 524288
 
     @property
+    def ssFilter(self):
+        return 1048576
+
+    @property
     def UPDATE_STATE(self):
         # set states to format Form at update mode
         return (self.ssInsert  | self.ssUpdate  | self.ssDelete   | self.ssPost    | self.ssValidate )
@@ -197,8 +201,8 @@ class TScreenStates(BaseClass):
     @property
     def LOADING_STATE(self):
         # set states to format Form at Loading Data mode
-        return (self.ssSearch  | self.ssExecute | self.ssClose    | self.ssOpen    | self.ssSearchAll)
-
+        return (self.ssSearch  | self.ssExecute | self.ssClose    | self.ssOpen    | self.ssSearchAll | self.ssFilter)
+ 
     def getStateProperties(self, stt: int):
         res = False
         if (stt in self.states):

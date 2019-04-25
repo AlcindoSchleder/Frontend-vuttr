@@ -11,7 +11,7 @@
     * @copyright  Vocatio Telecom <https://www.vocatiotelecom.com.br>
 """
 
-from baseClass import BaseClass
+from commom.baseClass import *
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout,
                             QHBoxLayout, QVBoxLayout, QMenuBar,QMenu, QToolBar,
                             QAction, QTabWidget, QTreeWidget, QFormLayout, QFrame,
@@ -19,9 +19,11 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout,
                             QLayout, QSizePolicy, QLabel)
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize, QRect, QObject, QCoreApplication, pyqtSignal, pyqtSlot
-from screenState import TScreenStates
+from commom.screenState import TScreenStates
 
-class TfrmBase(QMainWindow, BaseClass):
+class TfrmBase(QMainWindow, TBaseClass):
+
+
     def __init__(self, parent=None):
         super(TfrmBase, self).__init__()
         self.recordCount = 0
@@ -30,7 +32,6 @@ class TfrmBase(QMainWindow, BaseClass):
         self._defaultSettings()
         self._createWidgets()
         self._setEvents()
-        self.translateForm()
 
     def _defaultSettings(self):
         self.setObjectName("frmBase")
@@ -83,7 +84,7 @@ class TfrmBase(QMainWindow, BaseClass):
 
     def _createAppActions(self):
         # Exit Program Action
-        self.acExit = QAction(self.getIcon("../resources/exit.ico", QSize(32, 32)), '&Sair')
+        self.acExit = QAction(self.getIcon("./resources/exit.ico", QSize(32, 32)), '&Sair')
         self.acExit.setObjectName("acExit")
         self.acExit.setShortcut('Ctrl+Q')
         self.acExit.setStatusTip('Finalizar o Programa')
@@ -91,57 +92,57 @@ class TfrmBase(QMainWindow, BaseClass):
     
     def _createOpeActions(self):
         # Search Action
-        self.acSearch = QAction(self.getIcon("../resources/Search.ico", QSize(32, 32)), '&Pesquisar')
+        self.acSearch = QAction(self.getIcon("./resources/Search.ico", QSize(32, 32)), '&Pesquisar')
         self.acSearch.setObjectName("acSearch")
         self.acSearch.setShortcut('F5,Ctrl+P')
         self.acSearch.setStatusTip('Preenche o Filtro para Selecionar Registros')
         # List Action
-        self.acList = QAction(self.getIcon("../resources/list.ico", QSize(32, 32)), '&Listar')
+        self.acList = QAction(self.getIcon("./resources/list.ico", QSize(32, 32)), '&Listar')
         self.acList.setShortcut('Ctrl+L')
         self.acList.setStatusTip('Listar todos os Registros')
         self.acList.setObjectName("acList")
         # Insert Action
-        self.acInsert = QAction(self.getIcon("../resources/db_add.ico", QSize(32, 32)), '&Inserir')
+        self.acInsert = QAction(self.getIcon("./resources/db_add.ico", QSize(32, 32)), '&Inserir')
         self.acInsert.setShortcut('F2,Ins')
         self.acInsert.setStatusTip('Incluir Novo Registros')
         self.acInsert.setObjectName("acInsert")
         # Update Action
-        self.acUpdate = QAction(self.getIcon("../resources/db_update.ico", QSize(32, 32)), '&Editar')
+        self.acUpdate = QAction(self.getIcon("./resources/db_update.ico", QSize(32, 32)), '&Editar')
         self.acUpdate.setShortcut('Ctrl+U')
         self.acUpdate.setStatusTip('Editar o Registro Atual')
         self.acUpdate.setObjectName("acUpdate")
         # Delete Action
-        self.acDelete = QAction(self.getIcon("../resources/db_remove.ico", QSize(32, 32)), '&Excluir')
+        self.acDelete = QAction(self.getIcon("./resources/db_remove.ico", QSize(32, 32)), '&Excluir')
         self.acDelete.setShortcut('Ctrl+Del')
         self.acDelete.setStatusTip('Exclui o Registro Atual')
         self.acDelete.setObjectName("acDelete")
         # Save Action
-        self.acSave = QAction(self.getIcon("../resources/db_commit.ico", QSize(32, 32)), '&Salvar')
+        self.acSave = QAction(self.getIcon("./resources/db_commit.ico", QSize(32, 32)), '&Salvar')
         self.acSave.setShortcut('F10,Ctrl+S')
         self.acSave.setStatusTip('Salva as Alterações do Registro')
         self.acSave.setObjectName("acSave")
         # Cancel Action
-        self.acCancel = QAction(self.getIcon("../resources/cancel.ico", QSize(32, 32)), '&Cancelar')
+        self.acCancel = QAction(self.getIcon("./resources/cancel.ico", QSize(32, 32)), '&Cancelar')
         self.acCancel.setShortcut('Esc')
         self.acCancel.setStatusTip('Cancela as Alterações do Registro')
         self.acCancel.setObjectName("acCancel")
         # First Action
-        self.acFirst = QAction(self.getIcon("../resources/start.ico", QSize(32, 32)), '&Início')
+        self.acFirst = QAction(self.getIcon("./resources/start.ico", QSize(32, 32)), '&Início')
         self.acFirst.setShortcut('Ctrl+Left')
         self.acFirst.setStatusTip('Vai para o Primeiro Registro')
         self.acFirst.setObjectName("acFirst")
         # Prior Action
-        self.acPrior = QAction(self.getIcon("../resources/left.ico", QSize(32, 32)), '&Anterior')
+        self.acPrior = QAction(self.getIcon("./resources/left.ico", QSize(32, 32)), '&Anterior')
         self.acPrior.setShortcut('Left')
         self.acPrior.setStatusTip('Vai para o Registro Anterior')
         self.acPrior.setObjectName("acPrior")
         # Next Action
-        self.acNext = QAction(self.getIcon("../resources/right.ico", QSize(32, 32)), '&Próximo')
+        self.acNext = QAction(self.getIcon("./resources/right.ico", QSize(32, 32)), '&Próximo')
         self.acNext.setShortcut('Right')
         self.acNext.setStatusTip('Vai para o Próximo Registro')
         self.acNext.setObjectName("acNext")
         # Last Action
-        self.acLast = QAction(self.getIcon("../resources/end.ico", QSize(32, 32)), '&Último')
+        self.acLast = QAction(self.getIcon("./resources/end.ico", QSize(32, 32)), '&Último')
         self.acLast.setShortcut('Ctrl+Right')
         self.acLast.setStatusTip('Vai para o Último Registro')
         self.acLast.setObjectName("acLast")
@@ -276,18 +277,6 @@ class TfrmBase(QMainWindow, BaseClass):
         self.tabMain.setCurrentIndex(0)
 
     def _setLayouts(self):
-        self.formLayoutWidget = QWidget(self.pgDetail)
-        self.formLayoutWidget.setGeometry(QRect(-1, -1, 641, 370))
-        self.formLayoutWidget.setMinimumSize(QSize(641, 370))
-        self.formLayoutWidget.setObjectName("formLayoutWidget")
-        self.frmLayout = QFormLayout(self.formLayoutWidget)
-        self.frmLayout.setSizeConstraint(QLayout.SetMaximumSize)
-        self.frmLayout.setFieldGrowthPolicy(QFormLayout.ExpandingFieldsGrow)
-        self.frmLayout.setLabelAlignment(Qt.AlignRight|Qt.AlignTop|Qt.AlignTrailing)
-        self.frmLayout.setFormAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
-        self.frmLayout.setContentsMargins(5, 5, 5, 5)
-        self.frmLayout.setSpacing(6)
-        self.frmLayout.setObjectName("frmLayout")
         self.gridLayout.addWidget(self.tabMain, 0, Qt.AlignBottom | Qt.AlignRight, 1, 1)
         self.setCentralWidget(self.clientArea)
 
@@ -493,9 +482,3 @@ class TfrmBase(QMainWindow, BaseClass):
     @pyqtSlot()
     def closeApp(self):
         self.close()
-
-root = QApplication([])
-app = TfrmBase()
-app.show()
-import sys
-sys.exit(root.exec_())
