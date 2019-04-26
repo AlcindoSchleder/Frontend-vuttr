@@ -82,6 +82,30 @@ STT_BG   = 2
 STT_FG   = 3
 
 class TScreenStates(TBaseClass):
+
+    ssInactive  = 0
+    ssInsert    = 1
+    ssUpdate    = 2
+    ssDelete    = 4
+    ssBrowse    = 8
+    ssClose     = 16
+    ssCancel    = 32
+    ssPost      = 64
+    ssCommit    = 128
+    ssStartTr   = 256
+    ssRollback  = 512
+    ssFirst     = 1024
+    ssPrior     = 2048
+    ssNext      = 4096
+    ssLast      = 8192
+    ssRefresh   = 16384
+    ssOpen      = 32768
+    ssSearch    = 65536
+    ssExecute   = 131072
+    ssValidate  = 262144
+    ssSearchAll = 524288
+    ssFilter    =  1048576
+
     # Class constructor: this class receive a callback function that must follow this format:
     # def name_of_function(OldState: int, NewState: int):
     def __init__(self, callback):
@@ -95,93 +119,6 @@ class TScreenStates(TBaseClass):
         # then is called each _workState changes
         # its your setter test callback function
         self.OnStateChange = callback
-    @property
-    def ssInactive(self):
-        return 0
-
-    @property
-    def ssInsert(self):
-        return 1
-
-    @property
-    def ssUpdate(self):
-        return 2
-
-    @property
-    def ssDelete(self):
-        return 4
-
-    @property
-    def ssBrowse(self):
-        return 8
-
-    @property
-    def ssClose(self):
-        return 16
-
-    @property
-    def ssCancel(self):
-        return 32
-
-    @property
-    def ssPost(self):
-        return 64
-
-    @property
-    def ssCommit(self):
-        return 128
-
-    @property
-    def ssStartTr(self):
-        return 256
-
-    @property
-    def ssRollback(self):
-        return 512
-
-    @property
-    def ssFirst(self):
-        return 1024
-
-    @property
-    def ssPrior(self):
-        return 2048
-
-    @property
-    def ssNext(self):
-        return 4096
-
-    @property
-    def ssLast(self):
-        return 8192
-
-    @property
-    def ssRefresh(self):
-        return 16384
-
-    @property
-    def ssOpen(self):
-        return 32768
-
-    @property
-    def ssSearch(self):
-        return 65536
-
-    @property
-    def ssExecute(self):
-        return 131072
-
-    @property
-    def ssValidate(self):
-        return 262144
-
-    @property
-    def ssSearchAll(self):
-        return 524288
-
-    @property
-    def ssFilter(self):
-        return 1048576
 
     @property
     def UPDATE_STATE(self):
