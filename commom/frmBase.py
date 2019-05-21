@@ -21,14 +21,15 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize, QRect, QObject, QCoreApplication, pyqtSignal, pyqtSlot
 from commom.screenState import TScreenStates
 
-class TfrmBase(QMainWindow, TBaseClass):
+class TfrmBase(QMainWindow, TScreenStates):
 
+    recordCount = 0
 
     def __init__(self, parent=None):
         super(TfrmBase, self).__init__()
-        self.recordCount = 0
-        self._screenState = TScreenStates(self.onStateChange)
-        self.activeState = self._screenState.ssInactive
+
+        self.FOnStateChange = self.onStateChange
+        self.activeState = self.ssInactive
         self._defaultSettings()
         self._createWidgets()
         self._setEvents()
@@ -181,18 +182,18 @@ class TfrmBase(QMainWindow, TBaseClass):
     
     def _settingActionsEvents(self):
         # Set Menu Operations Trigger onClick
-        self.acSearch.triggered.connect(lambda: self.setFormStatus(self._screenState.ssSearch))
-        self.acList.triggered.connect(lambda: self.setFormStatus(self._screenState.ssSearchAll))
-        self.acInsert.triggered.connect(lambda: self.setFormStatus(self._screenState.ssInsert))
-        self.acUpdate.triggered.connect(lambda: self.setFormStatus(self._screenState.ssUpdate))
-        self.acDelete.triggered.connect(lambda: self.setFormStatus(self._screenState.ssDelete))
-        self.acSave.triggered.connect(lambda: self.setFormStatus(self._screenState.ssPost))
-        self.acCancel.triggered.connect(lambda: self.setFormStatus(self._screenState.ssCancel))
+        self.acSearch.triggered.connect(lambda: self.setFormStatus(self.ssSearch))
+        self.acList.triggered.connect(lambda: self.setFormStatus(self.ssSearchAll))
+        self.acInsert.triggered.connect(lambda: self.setFormStatus(self.ssInsert))
+        self.acUpdate.triggered.connect(lambda: self.setFormStatus(self.ssUpdate))
+        self.acDelete.triggered.connect(lambda: self.setFormStatus(self.ssDelete))
+        self.acSave.triggered.connect(lambda: self.setFormStatus(self.ssPost))
+        self.acCancel.triggered.connect(lambda: self.setFormStatus(self.ssCancel))
         # Set Menu Navigation Trigger onClick
-        self.acFirst.triggered.connect(lambda: self.setFormStatus(self._screenState.ssFirst))
-        self.acPrior.triggered.connect(lambda: self.setFormStatus(self._screenState.ssPrior))
-        self.acNext.triggered.connect(lambda: self.setFormStatus(self._screenState.ssNext))
-        self.acLast.triggered.connect(lambda: self.setFormStatus(self._screenState.ssLast))
+        self.acFirst.triggered.connect(lambda: self.setFormStatus(self.ssFirst))
+        self.acPrior.triggered.connect(lambda: self.setFormStatus(self.ssPrior))
+        self.acNext.triggered.connect(lambda: self.setFormStatus(self.ssNext))
+        self.acLast.triggered.connect(lambda: self.setFormStatus(self.ssLast))
 
     def _createToolBar(self):
         # Create a tbActions ToolBar
@@ -314,38 +315,38 @@ class TfrmBase(QMainWindow, TBaseClass):
 
     @property
     def activeState(self):
-        return self._screenState._activeValue
+        return self._activeValue
 
     @property
     def activeStateColor(self):
-        return self._screenState.activeValue['FG']
+        return self.activeValue['FG']
 
     @property
     def activeStateBackgroud(self):
-        return self._screenState.activeValue['BG']
+        return self.activeValue['BG']
 
     @activeState.setter # Seta a Propriedade _activeState
     def activeState(self, value: int):
-        self._screenState.workValue = value
+        self.workValue = value
         self._activeState = value
 
     def setScreenState(self, stt: int):
-        self.acExit.setEnabled(self._screenState.inBrowse(stt))
+        self.acExit.setEnabled(self.inBrowse(stt))
         # Set Menu Operations Actions
-        self.acSearch.setEnabled((self._screenState.inBrowse(stt) or (self.recordCount == 0)))
-        self.acList.setEnabled((self._screenState.inBrowse(stt) or (self.recordCount == 0)))
-        self.acInsert.setEnabled(self._screenState.inBrowse(stt))
-        self.acUpdate.setEnabled((self._screenState.inBrowse(stt) and (self.recordCount > 0)))
-        self.acDelete.setEnabled((self._screenState.inBrowse(stt) and (self.recordCount > 0)))
-        self.acSave.setEnabled(self._screenState.inUpdate(stt))
-        self.acCancel.setEnabled(self._screenState.inUpdate(stt))
+        self.acSearch.setEnabled((self.inBrowse(stt) or (self.recordCount == 0)))
+        self.acList.setEnabled((self.inBrowse(stt) or (self.recordCount == 0)))
+        self.acInsert.setEnabled(self.inBrowse(stt))
+        self.acUpdate.setEnabled((self.inBrowse(stt) and (self.recordCount > 0)))
+        self.acDelete.setEnabled((self.inBrowse(stt) and (self.recordCount > 0)))
+        self.acSave.setEnabled(self.inUpdate(stt))
+        self.acCancel.setEnabled(self.inUpdate(stt))
         # Set Menu Navigation Actions
-        self.acFirst.setEnabled((self._screenState.inBrowse(stt) and (self.recordCount > 0)))
-        self.acPrior.setEnabled((self._screenState.inBrowse(stt) and (self.recordCount > 0)))
-        self.acNext.setEnabled((self._screenState.inBrowse(stt) and (self.recordCount > 0)))
-        self.acLast.setEnabled((self._screenState.inBrowse(stt) and (self.recordCount > 0)))
+        self.acFirst.setEnabled((self.inBrowse(stt) and (self.recordCount > 0)))
+        self.acPrior.setEnabled((self.inBrowse(stt) and (self.recordCount > 0)))
+        self.acNext.setEnabled((self.inBrowse(stt) and (self.recordCount > 0)))
+        self.acLast.setEnabled((self.inBrowse(stt) and (self.recordCount > 0)))
         # Set tab Main if state in Browse enabled
-        self.tabMain.setEnabled(self._screenState.inBrowse(stt))
+        self.tabMain.setEnabled(self.inBrowse(stt))
 
     def _layoutWidgets(self):
         return (self.frmLayout.itemAt(i) for i in range(self.frmLayout.count()))
@@ -407,53 +408,53 @@ class TfrmBase(QMainWindow, TBaseClass):
         raise NotImplementedError(500)
 
     def execOpertations(self, state: int):
-        if ((state == self._screenState.ssFilter) or (state == self._screenState.ssSearchAll)):
+        if ((state == self.ssFilter) or (state == self.ssSearchAll)):
             self.filterRecord()
-        elif (state == self._screenState.ssFirst):
+        elif (state == self.ssFirst):
             self.getFirstRecord()
-        elif (state == self._screenState.ssPrior):
+        elif (state == self.ssPrior):
             self.getPriorRecord()
-        elif (state == self._screenState.ssNext):
+        elif (state == self.ssNext):
             self.getNextRecord()
-        elif (state == self._screenState.ssLast):
+        elif (state == self.ssLast):
             self.getLastRecord()
-        elif (state == self._screenState.ssInsert):
+        elif (state == self.ssInsert):
             self.insertRecord()
-        elif (state == self._screenState.ssDelete):
+        elif (state == self.ssDelete):
             self.deleteRecord()
-        elif (state == self._screenState.ssUpdate):
+        elif (state == self.ssUpdate):
             self.updateRecord()
-        elif (state == self._screenState.ssPost):
+        elif (state == self.ssPost):
             self.postRecord()
         else:
             raise NotImplementedError(401, 'Operação não suportada')
     
     @pyqtSlot(int)
     def setFormStatus(self, state: int):
-        if ((state == self._screenState.ssSearch) and (self.activeState != state)):
+        if ((state == self.ssSearch) and (self.activeState != state)):
             self.clearFields()
             self.setColorFields()
             self.showDataDetails()
 
         if (self.activeState != state):
             self.activeState = state
-            if (state == self._screenState.ssCancel):
-                self.activeState = self._screenState.ssBrowse
+            if (state == self.ssCancel):
+                self.activeState = self.ssBrowse
 
 
     @pyqtSlot(int, int, dict, str)
     def onStateChange(self, NewState: int, OldState: int, Result:dict = {}, Err:str = ''):
         try:
             # show screen state on status bar
-            state = self._screenState.getStateProperties(NewState)
+            state = self.getStateProperties(NewState)
             style = '.QLabel { background-color: ' + state['BG'] + '; color: ' + state['FG'] + '; }'
             self.sbStatus.setStyleSheet(style)
             self.lbStatus.setText(state['Descr'])
 
+            # call operation into child screen
+            self.execOpertations(NewState)
             # change buttons states
             self.setScreenState(NewState)
-            # call operation into child screen
-            self.execOperation(NewState)
             # set result status code and result satatus Message
             self.setResultStatusCode = 200
             self.setResultStatusMessage = ''

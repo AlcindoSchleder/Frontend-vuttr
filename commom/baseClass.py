@@ -209,6 +209,7 @@ class errorCodes:
     * @copyright  Vocatio Telecom <https://www.vocatiotelecom.com.br>
 """
 class TBaseClass:
+    
     def __init__(self):
         self._result = self._setDefault()
     

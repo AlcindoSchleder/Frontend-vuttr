@@ -7,7 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5.QtWidgets import (QApplication, QWidget, QFormLayout, QLayout, QLabel,
-                            QLineEdit, QTextEdit, QListWidget, QDateTimeEdit)
+                            QLineEdit, QTextEdit, QListWidget, QDateTimeEdit, 
+                            QMessageBox)
 from PyQt5.QtCore import Qt, QSize, QRect, QCoreApplication
 from commom.frmBase import TfrmBase
 import sys
@@ -18,7 +19,7 @@ class TfrmVuttr(TfrmBase):
         self.setWindowIcon(self.getIcon("./resources/vuttr.ico", QSize(32, 32)))
         self._createFormWidgets()
         self.translateForm()
-        self.activeState = self._screenState.ssSearch
+        self.activeState = self.ssSearch
     
     def _createFormWidgets(self):
         self.formLayoutWidget = QWidget(self.pgDetail)
@@ -82,8 +83,6 @@ class TfrmVuttr(TfrmBase):
         self.lbUpdateDate.setObjectName("lbUpdateDate")
         self.frmLayout.setWidget(5, QFormLayout.LabelRole, self.lbUpdateDate)
 
-
-
     def translateForm(self):
         super(TfrmVuttr, self).translateForm()
         self.setWindowTitle(self._translate("TfrmVuttr", "VUTTR Application"))
@@ -94,6 +93,33 @@ class TfrmVuttr(TfrmBase):
         self.lbTags.setText(self._translate("TfrmVuttr", "Tags: "))
         self.lbInsertDate.setText(self._translate("TfrmVuttr", "Data de Inserção: "))
         self.lbUpdateDate.setText(self._translate("TfrmVuttr", "Data  da Última Edição: "))
+
+    def filterRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'filtrando Registros')
+
+    def getFirstRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Primeiro Registro')
+
+    def getPriorRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Registro Anterior')
+
+    def getNextRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Próximo Registro')
+
+    def getLastRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Último Registro')
+
+    def insertRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Inserir Registro')
+
+    def deleteRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Excluindo Registro')
+
+    def updateRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Editando Registro')
+
+    def postRecord(self):
+        QMessageBox.information(self, self.windowTitle(), 'Gravando Registro')
 
 root = QApplication([])
 app = TfrmVuttr()

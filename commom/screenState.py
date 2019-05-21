@@ -104,13 +104,14 @@ class TScreenStates(TBaseClass):
     ssExecute   = 131072
     ssValidate  = 262144
     ssSearchAll = 524288
-    ssFilter    =  1048576
+    ssFilter    = 1048576
 
     # Class constructor: this class receive a callback function that must follow this format:
     # def name_of_function(OldState: int, NewState: int):
-    def __init__(self, callback):
+    def __init__(self):
+        super(TScreenStates, self).__init__()
         self._OnStateChange = None
-        self._activeValue    = self.ssInactive # Property that represents the Work State of Form
+        self._activeValue   = self.ssInactive # Property that represents the Work State of Form
         # This propert is screenstate transition... 
         # change it then call callback function if result is ok
         # set active State to Browse else return work state to active state before call
@@ -118,7 +119,7 @@ class TScreenStates(TBaseClass):
         # Property that store a callback function of the StateChange
         # then is called each _workState changes
         # its your setter test callback function
-        self.OnStateChange = callback
+        # self.OnStateChange = callback
 
     @property
     def UPDATE_STATE(self):
@@ -175,7 +176,7 @@ class TScreenStates(TBaseClass):
             self.ssLast     : ['ssLast'      , 'Último'     , 'black'  , 'white' ], 
             self.ssRefresh  : ['ssRefresh'   , 'Recarregar' , 'green'  , 'black' ],
             self.ssOpen     : ['ssOpen'      , 'Conectando' , 'blue'   , 'white' ],
-            self.ssSearch   : ['ssSearch'    , 'Pesquisando', 'info'   , 'orange'],
+            self.ssSearch   : ['ssSearch'    , 'Pesquisando', '#FFF68F', 'black'],
             self.ssExecute  : ['ssExecute'   , 'Coletando'  , 'red'    , 'yellow'], 
             self.ssValidate : ['ssValidate'  , 'Validando'  , 'white'  , 'orange'],
             self.ssSearchAll: ['ssSearchAll' , 'Listando'   , 'info'   , 'orange']
@@ -198,7 +199,7 @@ class TScreenStates(TBaseClass):
             raise NotImplementedError(404, 'Código do Status (' + str(self._workValue) + ') não existe')
 
     @property
-    def OnStateChange(self):
+    def FOnStateChange(self):
         return self._OnStateChange
 
     def inUpdate(self, stt: int):
@@ -226,8 +227,8 @@ class TScreenStates(TBaseClass):
                 # call a event callback
                 self._OnStateChange(self._workValue, self.activeValue, self.result, e)
 
-    @OnStateChange.setter
-    def OnStateChange(self, callback):
+    @FOnStateChange.setter
+    def FOnStateChange(self, callback):
         hasErr = False
         params = ['int', 'int', 'dict', 'str']
         sig = signature(callback)
